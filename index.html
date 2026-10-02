@@ -37,12 +37,7 @@
     </script>
     <style>
         /* ===== NAVEGACIÓN FIJA ===== */
-        html { scroll-behavior: smooth; }
-        section, main, header, footer { scroll-margin-top: 80px; }
-
-        #main-nav {
-            transition: all 0.3s ease;
-        }
+        #main-nav { transition: all 0.3s ease; }
 
         .nav-link {
             padding: 8px 14px;
@@ -53,6 +48,9 @@
             white-space: nowrap;
             transition: all 0.2s;
             text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: transparent;
         }
         .nav-link:hover, .nav-link.active {
             background: rgba(16, 185, 129, 0.12);
@@ -61,6 +59,18 @@
 
         .nav-scroll::-webkit-scrollbar { display: none; }
         .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Secciones SPA */
+        .content-section {
+            display: none;
+            animation: sectionFadeIn 0.4s ease-out;
+        }
+        .content-section.active { display: block; }
+
+        @keyframes sectionFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* Estilos del modo oscuro para la nav */
         body.dark-mode #main-nav {
@@ -122,16 +132,9 @@
             height: auto;
         }
         
-        .pdf-controls button {
-            transition: all 0.2s ease;
-        }
-        .pdf-controls button:hover {
-            transform: scale(1.05);
-        }
-        .pdf-controls button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
+        .pdf-controls button { transition: all 0.2s ease; }
+        .pdf-controls button:hover { transform: scale(1.05); }
+        .pdf-controls button:disabled { opacity: 0.3; cursor: not-allowed; }
         
         /* Loader */
         .loader {
@@ -172,21 +175,16 @@
             background: rgba(30, 41, 59, 0.8) !important;
             border-color: rgba(71, 85, 105, 0.5) !important;
         }
-        body.dark-mode .text-navy {
-            color: #f8fafc !important;
-        }
-        body.dark-mode .text-slate-600, body.dark-mode .text-slate-500 {
-            color: #94a3b8 !important;
-        }
-        body.dark-mode .border-slate-200 {
-            border-color: #334155 !important;
-        }
-        body.dark-mode .bg-navy {
-            background-color: #0f172a !important;
-        }
+        body.dark-mode .text-navy { color: #f8fafc !important; }
+        body.dark-mode .text-slate-600, body.dark-mode .text-slate-500 { color: #94a3b8 !important; }
+        body.dark-mode .border-slate-200 { border-color: #334155 !important; }
+        body.dark-mode .bg-navy { background-color: #0f172a !important; }
         body.dark-mode .btn-pdf {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border: 1px solid #334155;
+        }
+        body.dark-mode #inicio {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
         }
     </style>
 </head>
@@ -195,22 +193,22 @@
     <!-- ================= MENÚ DE NAVEGACIÓN FIJO ================= -->
     <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 glass border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-3 md:px-6 flex items-center justify-between h-16 gap-2">
-            <!-- Logo / Título -->
-            <a href="#inicio" class="flex items-center gap-2 font-display font-black text-navy whitespace-nowrap">
+            <!-- Logo -->
+            <button onclick="showSection('inicio')" class="flex items-center gap-2 font-display font-black text-navy whitespace-nowrap cursor-pointer">
                 <div class="w-8 h-8 bg-emerald rounded-lg flex items-center justify-center text-white text-sm">E</div>
                 <span class="hidden sm:inline">Foro ESAP</span>
-            </a>
+            </button>
 
             <!-- Enlaces (scroll horizontal en móvil) -->
             <div class="flex-1 overflow-x-auto nav-scroll">
                 <div class="flex gap-1 min-w-max px-2">
-                    <a href="#inicio" class="nav-link">Inicio</a>
-                    <a href="#contexto" class="nav-link">Contexto</a>
-                    <a href="#grupos" class="nav-link">Grupos</a>
-                    <a href="#taller" class="nav-link">Taller</a>
-                    <a href="#lecturas" class="nav-link">Lecturas</a>
-                    <a href="#glosario" class="nav-link">Glosario</a>
-                    <a href="#bibliografia" class="nav-link">Bibliografía</a>
+                    <button class="nav-link active" data-section="inicio" onclick="showSection('inicio')">Inicio</button>
+                    <button class="nav-link" data-section="contexto" onclick="showSection('contexto')">Contexto</button>
+                    <button class="nav-link" data-section="grupos" onclick="showSection('grupos')">Grupos</button>
+                    <button class="nav-link" data-section="taller" onclick="showSection('taller')">Taller</button>
+                    <button class="nav-link" data-section="lecturas" onclick="showSection('lecturas')">Lecturas</button>
+                    <button class="nav-link" data-section="glosario" onclick="showSection('glosario')">Glosario</button>
+                    <button class="nav-link" data-section="bibliografia" onclick="showSection('bibliografia')">Bibliografía</button>
                 </div>
             </div>
 
@@ -221,639 +219,589 @@
         </div>
     </nav>
 
-    <!-- ================= HERO SECTION ================= -->
-    <header id="inicio" class="relative min-h-[90vh] pt-20 flex items-center justify-center bg-gradient-to-br from-navy via-blue-900 to-slate-900 overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
-        
-        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center" data-aos="fade-up" data-aos-duration="1000">
-            <span class="inline-block py-1 px-3 rounded-full bg-emerald/20 text-emerald-300 text-sm font-semibold tracking-wider mb-6 border border-emerald/30">
-                Foro Académico - ESAP
-            </span>
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white leading-tight mb-6">
-                Adaptación de Entidades Territoriales a Entornos Cambiantes
-            </h1>
-            <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-10 font-light">
-                Una exploración rigurosa desde la teoría organizacional y la gestión pública territorial. 
-                Análisis de los desafíos de Sucre frente a la descentralización, gobernanza multinivel y burocracia adaptativa.
-            </p>
-            <a href="#lecturas" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-emerald rounded-full hover:bg-emerald-600 transition-all duration-300 shadow-lg shadow-emerald/30 hover:shadow-emerald/50 hover:-translate-y-1">
-                Explorar las 5 Lecturas
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </a>
-        </div>
-    </header>
+    <!-- ================= CONTENEDOR DE SECCIONES ================= -->
+    <div id="content" class="pt-16">
 
-    <!-- ================= CONTEXTO DE SUCRE ================= -->
-    <section id="contexto" class="py-16 px-6 bg-white border-b border-slate-200">
-        <div class="max-w-5xl mx-auto" data-aos="fade-up">
-            <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">¿Por qué analizar el contexto de Sucre?</h2>
-                <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass p-6 rounded-xl border border-slate-200">
-                    <h3 class="font-bold text-emerald mb-2 text-lg">Desafíos Territoriales</h3>
-                    <p class="text-sm text-slate-600">Sucre enfrenta retos únicos de coordinación entre sus municipios y el nivel nacional, lo que exige una gran capacidad de adaptación institucional.</p>
-                </div>
-                <div class="glass p-6 rounded-xl border border-slate-200">
-                    <h3 class="font-bold text-emerald mb-2 text-lg">Descentralización Real</h3>
-                    <p class="text-sm text-slate-600">La dependencia de transferencias nacionales y la falta de autonomía fiscal son barreras críticas para el desarrollo local y la gobernanza.</p>
-                </div>
-                <div class="glass p-6 rounded-xl border border-slate-200">
-                    <h3 class="font-bold text-emerald mb-2 text-lg">Potencial Adaptativo</h3>
-                    <p class="text-sm text-slate-600">Las entidades de Sucre tienen la oportunidad de implementar modelos de burocracia adaptativa y gobernanza en red para superar las crisis.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= GRUPOS CIPA ================= -->
-    <section id="grupos" class="py-16 px-6 bg-slate-50 border-b border-slate-200">
-        <div class="max-w-5xl mx-auto" data-aos="fade-up">
-            <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Grupos de Trabajo (CIPA)</h2>
-                <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- CIPA 1 -->
-                <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
-                    <h3 class="font-bold text-navy text-lg mb-2">CIPA 1 - Alcaldía de Sincelejo</h3>
-                    <ul class="text-sm text-slate-600 space-y-1">
-                        <li>• Julieth Camila Navarro Pérez</li>
-                        <li>• Alvaro José Suarez Torres</li>
-                        <li>• Brayan Andrés Cera Pérez</li>
-                        <li>• Helen Sofia Silgado Ortega</li>
-                    </ul>
-                </div>
-                <!-- CIPA 2 -->
-                <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
-                    <h3 class="font-bold text-navy text-lg mb-2">CIPA 2 - Alcaldía de Chinú</h3>
-                    <ul class="text-sm text-slate-600 space-y-1">
-                        <li>• Alberto José Palencia Molina</li>
-                        <li>• Katty del Carmen Vélez Álvarez</li>
-                        <li>• María José Álvarez Montes</li>
-                    </ul>
-                </div>
-                <!-- CIPA 3 -->
-                <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
-                    <h3 class="font-bold text-navy text-lg mb-2">CIPA 3 - Alcaldía de Sucre</h3>
-                    <ul class="text-sm text-slate-600 space-y-1">
-                        <li>• Roberto Gómez Marriaga</li>
-                        <li>• Eduin Manuel Vargas Lara</li>
-                        <li>• Fernando Andrés Vergara Rodríguez</li>
-                        <li>• Stivenson Andrés Barreto Mercado</li>
-                        <li>• Marisol Velasquez Suarez</li>
-                    </ul>
-                </div>
-                <!-- CIPA 4 -->
-                <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
-                    <h3 class="font-bold text-navy text-lg mb-2">CIPA 4 - Alcaldía de Tuchín</h3>
-                    <ul class="text-sm text-slate-600 space-y-1">
-                        <li>• Yulisa Andrea Flores Mendoza</li>
-                        <li>• Laura Vanessa Bravo Pérez</li>
-                        <li>• Liliana Andrea Ibañez Muentes</li>
-                        <li>• Luis Eduardo Ricardo Diaz</li>
-                    </ul>
-                </div>
-                <!-- CIPA 5 -->
-                <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
-                    <h3 class="font-bold text-navy text-lg mb-2">CIPA 5 - Alcaldía de Tolú</h3>
-                    <ul class="text-sm text-slate-600 space-y-1">
-                        <li>• Víctor José Arroyo Orozco</li>
-                        <li>• Coni Michel Bertel Ricardo</li>
-                        <li>• Martha Lucia Oviedo Páez</li>
-                        <li>• Sergio Manuel Martínez Narvaez</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= TALLER: INSTRUMENTO ================= -->
-    <section id="taller" class="py-16 px-6 bg-white border-b border-slate-200">
-        <div class="max-w-5xl mx-auto" data-aos="fade-up">
-            <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Taller: Análisis de la Estructura Orgánica</h2>
-                <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
-                <p class="text-slate-500 mt-4 max-w-2xl mx-auto">Instrumento de levantamiento de datos para el análisis de la organización formal e informal en alcaldías del Departamento de Sucre.</p>
-            </div>
-
-            <div class="space-y-4">
-                <!-- Parte A -->
-                <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                        <h3 class="font-display font-bold text-navy">Parte A: Identificación de la Entidad Territorial</h3>
-                        <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
-                        <p><strong>Ítems a diligenciar:</strong> Nombre de la Alcaldía, Municipio, Categoría municipal (Ley 617 de 2000), Número de habitantes (DANE), Fuente del organigrama (Decreto/Acuerdo), Fecha del acto administrativo.</p>
-                        <p class="text-xs bg-blue-50 p-3 rounded border-l-4 border-blue-400"><strong>Nota metodológica:</strong> La categoría municipal determina la complejidad de la estructura administrativa. Municipios de menor categoría tienden a estructuras más simples.</p>
-                    </div>
-                </details>
-
-                <!-- Parte B -->
-                <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                        <h3 class="font-display font-bold text-navy">Parte B: Organización Formal – Estructura Jerárquica</h3>
-                        <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
-                        <p><strong>B.1. Niveles jerárquicos:</strong> Marque los niveles identificados (Directivo, Asesor, Ejecutivo, etc.) y dependencias por nivel.</p>
-                        <p><strong>B.2. Dependencias identificadas:</strong> Complete el cuadro con nombre, nivel jerárquico y funciones principales (Ej: Despacho del Alcalde - Directivo - Dirección administrativa).</p>
-                        <p class="text-xs text-slate-500">Tipologías comunes: Gobierno, Hacienda, Planeación, Infraestructura, Desarrollo Social, Salud, Educación, Ambiente.</p>
-                    </div>
-                </details>
-
-                <!-- Parte C -->
-                <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                        <h3 class="font-display font-bold text-navy">Parte C: Organización Formal – Estructura Funcional</h3>
-                        <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
-                        <p><strong>C.1. División funcional:</strong> Identifique la dependencia responsable de cada sector (Hacienda, Planeación, Salud, Educación, etc.).</p>
-                        <p><strong>C.2. Líneas de autoridad y comunicación:</strong> Analice la jefatura superior, reportes de secretarios, flujo de comunicación y dependencias de control.</p>
-                        <p class="text-xs bg-slate-50 p-3 rounded"><strong>Marco normativo:</strong> Constitución Política Art. 315, Ley 136 de 1994, Ley 489 de 1998.</p>
-                    </div>
-                </details>
-
-                <!-- Parte D -->
-                <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                        <h3 class="font-display font-bold text-navy">Parte D: Organización Informal</h3>
-                        <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
-                        <p><strong>D.1. Elementos informales:</strong> Identifique grupos de afinidad política, redes no formales, liderazgos informales, alianzas, resistencia al cambio.</p>
-                        <p><strong>D.2. Tensión formal vs. informal:</strong> Analice la toma de decisiones, comunicación, reconocimiento y distribución de tareas.</p>
-                        <p class="text-xs bg-emerald/10 p-3 rounded text-emerald-800"><strong>Aporte teórico (Elton Mayo):</strong> La organización informal surge de las relaciones sociales y puede satisfacer necesidades que la formal no cubre.</p>
-                    </div>
-                </details>
-
-                <!-- Parte E y F -->
-                <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                        <h3 class="font-display font-bold text-navy">Parte E y F: Síntesis Analítica y Conclusiones</h3>
-                        <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
-                        <p><strong>E.1. Matriz DOFA:</strong> Fortalezas, Debilidades, Oportunidades y Amenazas de la estructura organizacional.</p>
-                        <p><strong>E.2. Preguntas de análisis crítico:</strong> ¿Responde a las necesidades? ¿Qué tipo de estructura predomina? ¿Cómo influye la organización informal? ¿Qué reformas se sugieren? ¿Cómo se relaciona con Taylor, Fayol y Weber?</p>
-                        <p><strong>F. Conclusiones del Grupo:</strong> Hallazgos sobre organización formal e informal, relación con el contexto de Sucre y aprendizajes del taller.</p>
-                    </div>
-                </details>
-
-                <!-- Rúbrica y Foro -->
-                <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                        <h3 class="font-display font-bold text-navy">Rúbrica de Evaluación e Instrucciones del Foro Moodle</h3>
-                        <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
-                        <p><strong>Rúbrica:</strong> Identificación estructura formal (25%), Análisis organización informal (20%), Aplicación referentes teóricos (20%), Capacidad analítica y propuesta (20%), Trabajo en equipo (15%).</p>
-                        <p><strong>Foro Moodle:</strong> Título: "Organización formal e informal en las alcaldías del Departamento de Sucre". Consigna: 3 preguntas (hallazgos, organización informal, relación teórica). Requisitos: Mínimo 500 palabras, 2 comentarios a compañeros, citación APA 7ª ed.</p>
-                        <p class="text-xs bg-yellow-50 p-3 rounded border-l-4 border-yellow-400"><strong>Fecha límite:</strong> 28 de septiembre de 2026. Criterios: Claridad conceptual (40%), Argumentación crítica (40%), Participación oportuna (20%).</p>
-                    </div>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= ACORDEÓN DE LECTURAS CON BARRA DE PROGRESO ================= -->
-    <main id="lecturas" class="py-24 px-6 max-w-5xl mx-auto">
-        <div class="text-center mb-16" data-aos="fade-up">
-            <h2 class="text-3xl md:text-4xl font-display font-bold text-navy mb-4">Lecturas Rigurosas para el Foro</h2>
-            <div class="w-24 h-1 bg-emerald mx-auto rounded-full mb-6"></div>
-            <p class="text-slate max-w-2xl mx-auto">Toca sobre cada lectura para expandirla, leer su descripción y abrir el PDF completo en el visor integrado.</p>
-            
-            <!-- Barra de Progreso -->
-            <div class="mt-8 max-w-md mx-auto bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <div class="flex justify-between text-xs font-bold text-navy mb-2">
-                    <span>Progreso de Lectura</span>
-                    <span id="progress-text">0 de 5 leídas</span>
-                </div>
-                <div class="w-full bg-slate-200 rounded-full h-3">
-                    <div id="progress-bar-fill" class="bg-emerald h-3 rounded-full progress-bar" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="space-y-4">
-            
-            <!-- ===== LECTURA 1 ===== -->
-            <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
-                <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                    <div class="flex items-start sm:items-center gap-4">
-                        <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 1</span>
-                        <div>
-                            <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">La arquitectura institucional de la descentralización en Colombia</h3>
-                            <p class="text-xs text-slate-500 font-medium mt-1">Revista BioAdministración (DAFP) - Edición 5</p>
-                        </div>
-                    </div>
-                    <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="p-6 border-t border-slate-100 bg-white/80">
-                    <div class="mb-4">
-                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
-                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
-                            <li>Identifica cinco fallas estructurales del sistema descentralizado colombiano.</li>
-                            <li>Analiza la recentralización silenciosa y la alta carga administrativa en alcaldías.</li>
-                            <li>Propone la necesidad de un sistema competencial claro para la adaptabilidad territorial.</li>
-                        </ul>
-                    </div>
-                    <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de revista institucional</span>
-                    <p class="text-sm text-slate-600 leading-relaxed mb-4">
-                        Diagnóstico crítico que identifica cinco fallas estructurales: ausencia de sistema competencial, recentralización silenciosa, falta de visión diferenciada, coordinación multinivel débil y alta carga administrativa. Ideal para analizar las rigideces institucionales en alcaldías y gobernaciones.
-                    </p>
-                    <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
-                        <strong>Pregunta Orientadora:</strong> "¿Cuáles de las cinco fallas estructurales identificadas en la lectura explican mejor la dificultad de las entidades territoriales de Sucre para adaptarse a entornos cambiantes?"
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Revista-BioAdministracion-5ed.pdf', 'Lectura 1: Arquitectura de la Descentralización')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            📄 Ver PDF Completo
-                        </button>
-                        <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
-                            📖 Marcar como leída
-                        </button>
-                    </div>
-                </div>
-            </details>
-
-            <!-- ===== LECTURA 2 ===== -->
-            <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
-                <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                    <div class="flex items-start sm:items-center gap-4">
-                        <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 2</span>
-                        <div>
-                            <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">Comunicación organizacional y gestión del cambio</h3>
-                            <p class="text-xs text-slate-500 font-medium mt-1">Marcy Sarely Portocarrero Torres (2025)</p>
-                        </div>
-                    </div>
-                    <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="p-6 border-t border-slate-100 bg-white/80">
-                    <div class="mb-4">
-                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
-                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
-                            <li>La comunicación organizacional es un pilar fundamental para la modernización institucional.</li>
-                            <li>El liderazgo y la eficiencia organizacional determinan el éxito de la adaptación al cambio.</li>
-                            <li>Aplicable al contexto colombiano para mejorar la gestión en alcaldías municipales.</li>
-                        </ul>
-                    </div>
-                    <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Tesis de grado</span>
-                    <p class="text-sm text-slate-600 leading-relaxed mb-4">
-                        Estudio en un municipio peruano aplicable al contexto colombiano. Evidencia que la comunicación efectiva, el liderazgo y la eficiencia organizacional son determinantes para la modernización institucional y la adaptación al cambio.
-                    </p>
-                    <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
-                        <strong>Pregunta Orientadora:</strong> "¿Qué estrategias de comunicación organizacional podrían implementarse en una alcaldía de Sucre para mejorar su capacidad de adaptación al cambio?"
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Marcy%20Sarely%20Portocarrero%20Torres%20-%20FECICO%20%281%29.pdf', 'Lectura 2: Comunicación y Gestión del Cambio')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            📄 Ver PDF Completo
-                        </button>
-                        <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
-                            📖 Marcar como leída
-                        </button>
-                    </div>
-                </div>
-            </details>
-
-            <!-- ===== LECTURA 3 ===== -->
-            <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
-                <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                    <div class="flex items-start sm:items-center gap-4">
-                        <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 3</span>
-                        <div>
-                            <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">Capacidades institucionales en municipios PDET</h3>
-                            <p class="text-xs text-slate-500 font-medium mt-1">Repositorio Institucional ESAP</p>
-                        </div>
-                    </div>
-                    <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="p-6 border-t border-slate-100 bg-white/80">
-                    <div class="mb-4">
-                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
-                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
-                            <li>Analiza las capacidades administrativas, políticas y transversales en municipios PDET.</li>
-                            <li>La debilidad en estas capacidades explica los rezagos en la implementación de políticas.</li>
-                            <li>Fortalecer estas capacidades es urgente para mejorar la adaptabilidad territorial.</li>
-                        </ul>
-                    </div>
-                    <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de investigación</span>
-                    <p class="text-sm text-slate-600 leading-relaxed mb-4">
-                        Analiza las capacidades administrativas, políticas y transversales en municipios PDET. Concluye que la debilidad en estas capacidades explica los rezagos en la implementación de políticas territoriales y la adaptabilidad.
-                    </p>
-                    <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
-                        <strong>Pregunta Orientadora:</strong> "¿Qué capacidades institucionales específicas (administrativas, políticas o transversales) son más urgentes de fortalecer en las entidades territoriales de Sucre para que puedan adaptarse a entornos cambiantes?"
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Tesis_Medrano%20Rincon%20Jenny%20A.pdf', 'Lectura 3: Capacidades Institucionales en Municipios PDET')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            📄 Ver PDF Completo
-                        </button>
-                        <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
-                            📖 Marcar como leída
-                        </button>
-                    </div>
-                </div>
-            </details>
-
-            <!-- ===== LECTURA 4 ===== -->
-            <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
-                <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                    <div class="flex items-start sm:items-center gap-4">
-                        <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 4</span>
-                        <div>
-                            <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">Gobernanza del agua en La Mojana</h3>
-                            <p class="text-xs text-slate-500 font-medium mt-1">Triana, Acuña & Ruiz (2025) - Inst. Humboldt</p>
-                        </div>
-                    </div>
-                    <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="p-6 border-t border-slate-100 bg-white/80">
-                    <div class="mb-4">
-                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
-                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
-                            <li>La Mojana es un territorio hidrosocial comparable con la realidad de Sucre.</li>
-                            <li>Propone la gobernanza adaptativa participativa y el aprendizaje social como clave.</li>
-                            <li>La resiliencia territorial depende de la transformación socioecológica y la participación.</li>
-                        </ul>
-                    </div>
-                    <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de investigación</span>
-                    <p class="text-sm text-slate-600 leading-relaxed mb-4">
-                        La Mojana como territorio hidrosocial comparable con Sucre. Propone la gobernanza adaptativa participativa y el aprendizaje social como clave para la resiliencia territorial y la transformación socioecológica.
-                    </p>
-                    <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
-                        <strong>Pregunta Orientadora:</strong> "¿Qué elementos de la gobernanza adaptativa participativa propuesta para La Mojana podrían aplicarse a las entidades territoriales de Sucre para enfrentar entornos cambiantes?"
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/MIA%2BVOL%2B22%2BNO%2B2%2BOCTUBER%2B2025%2B109-121.pdf', 'Lectura 4: Gobernanza del Agua en La Mojana')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            📄 Ver PDF Completo
-                        </button>
-                        <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
-                            📖 Marcar como leída
-                        </button>
-                    </div>
-                </div>
-            </details>
-
-            <!-- ===== LECTURA 5 ===== -->
-            <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
-                <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
-                    <div class="flex items-start sm:items-center gap-4">
-                        <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 5</span>
-                        <div>
-                            <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">From Weberian Bureaucracy to Adaptive Bureaucracy</h3>
-                            <p class="text-xs text-slate-500 font-medium mt-1">Garuda - Repositorio Académico Indonesio</p>
-                        </div>
-                    </div>
-                    <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </summary>
-                <div class="p-6 border-t border-slate-100 bg-white/80">
-                    <div class="mb-4">
-                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
-                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
-                            <li>Mapea la evolución de la burocracia weberiana hacia un modelo adaptativo.</li>
-                            <li>Propone 5 pilares: estructura ambidiestra, aprendizaje ágil, gobernanza en red, capacidades digitales y resiliencia.</li>
-                            <li>Conecta directamente con los desafíos de las entidades territoriales en contextos VUCA.</li>
-                        </ul>
-                    </div>
-                    <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de revisión integrativa</span>
-                    <p class="text-sm text-slate-600 leading-relaxed mb-4">
-                        Mapea la evolución hacia la burocracia adaptativa en contextos VUCA. Propone 5 pilares: estructura ambidiestra, aprendizaje ágil, gobernanza en red, capacidades digitales y resiliencia. Conecta directamente con el RAE13.
-                    </p>
-                    <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
-                        <strong>Pregunta Orientadora:</strong> "De los cinco pilares de la burocracia adaptativa propuestos, ¿cuál consideras más urgente de desarrollar en las entidades territoriales colombianas y por qué?"
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Trabajo%20de%20grado.pdf', 'Lectura 5: Burocracia Adaptativa')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            📄 Ver PDF Completo
-                        </button>
-                        <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
-                            📖 Marcar como leída
-                        </button>
-                    </div>
-                </div>
-            </details>
-
-        </div>
-    </main>
-
-    <!-- ================= BLOQUE DE SÍNTESIS ================= -->
-    <section class="py-24 px-6 bg-white border-t border-slate-200">
-        <div class="max-w-6xl mx-auto" data-aos="fade-up">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-display font-bold text-navy mb-4">Síntesis Comparativa</h2>
-                <p class="text-slate-500 max-w-2xl mx-auto">Matriz interactiva de las 5 lecturas, sus enfoques y niveles de análisis territorial.</p>
-            </div>
-            
-            <div class="overflow-x-auto rounded-2xl shadow-xl border border-slate-200 bg-white">
-                <table class="w-full text-left border-collapse min-w-[600px]">
-                    <thead>
-                        <tr class="bg-navy text-white">
-                            <th class="p-4 font-display font-bold text-sm uppercase tracking-wider">#</th>
-                            <th class="p-4 font-display font-bold text-sm uppercase tracking-wider">Lectura</th>
-                            <th class="p-4 font-display font-bold text-sm uppercase tracking-wider">Enfoque</th>
-                            <th class="p-4 font-display font-bold text-sm uppercase tracking-wider">Nivel de Análisis</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <tr class="hover:bg-emerald/5 transition-colors duration-200"><td class="p-4 font-bold text-navy">1</td><td class="p-4 text-slate-700">Arquitectura de la descentralización en Colombia</td><td class="p-4 text-slate-600">Diagnóstico institucional</td><td class="p-4"><span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">Macro (nacional)</span></td></tr>
-                        <tr class="hover:bg-emerald/5 transition-colors duration-200"><td class="p-4 font-bold text-navy">2</td><td class="p-4 text-slate-700">Comunicación y gestión del cambio municipal</td><td class="p-4 text-slate-600">Adaptación organizacional</td><td class="p-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">Micro (municipal)</span></td></tr>
-                        <tr class="hover:bg-emerald/5 transition-colors duration-200"><td class="p-4 font-bold text-navy">3</td><td class="p-4 text-slate-700">Capacidades institucionales en municipios PDET</td><td class="p-4 text-slate-600">Gobernanza multinivel</td><td class="p-4"><span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-bold">Meso (subnacional)</span></td></tr>
-                        <tr class="hover:bg-emerald/5 transition-colors duration-200"><td class="p-4 font-bold text-navy">4</td><td class="p-4 text-slate-700">Gobernanza adaptativa en La Mojana</td><td class="p-4 text-slate-600">Resiliencia territorial</td><td class="p-4"><span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-bold">Meso (regional)</span></td></tr>
-                        <tr class="hover:bg-emerald/5 transition-colors duration-200 border-b-0"><td class="p-4 font-bold text-navy">5</td><td class="p-4 text-slate-700">Burocracia adaptativa (marco teórico)</td><td class="p-4 text-slate-600">Teoría organizacional</td><td class="p-4"><span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">Macro (conceptual)</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= INSTRUCCIONES Y EVALUACIÓN ================= -->
-    <section class="py-24 px-6 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-6xl mx-auto" data-aos="fade-up">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-display font-bold text-navy mb-4">Instrucciones y Evaluación</h2>
-                <p class="text-slate-500 max-w-2xl mx-auto">Lineamientos para el desarrollo del foro en Moodle, basados en los criterios de la rúbrica.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass rounded-2xl p-8 border border-slate-200">
-                    <div class="w-12 h-12 bg-navy/10 rounded-full flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-display font-bold text-navy mb-4">Instrucciones</h3>
-                    <ul class="space-y-3 text-sm text-slate-600">
-                        <li class="flex items-start gap-2"><span class="text-emerald font-bold">•</span> Cada grupo debe leer las 5 lecturas asignadas.</li>
-                        <li class="flex items-start gap-2"><span class="text-emerald font-bold">•</span> Identificar 3 ideas clave de cada lectura.</li>
-                        <li class="flex items-start gap-2"><span class="text-emerald font-bold">•</span> Conectar las lecturas con el contexto de Sucre.</li>
-                        <li class="flex items-start gap-2"><span class="text-emerald font-bold">•</span> Responder a la pregunta orientadora asignada.</li>
-                        <li class="flex items-start gap-2"><span class="text-emerald font-bold">•</span> Comentar al menos 2 aportes de otros grupos.</li>
-                        <li class="flex items-start gap-2"><span class="text-emerald font-bold">•</span> Extensión mínima: 500 palabras por intervención.</li>
-                        <li class="flex items-start gap-2"><span class="text-emerald font-bold">•</span> Uso obligatorio de normas APA.</li>
-                    </ul>
-                </div>
-
-                <div class="glass rounded-2xl p-8 border border-slate-200">
-                    <div class="w-12 h-12 bg-emerald/10 rounded-full flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-display font-bold text-navy mb-4">Criterios de Evaluación</h3>
-                    <div class="space-y-6">
-                        <div><div class="flex justify-between text-sm font-bold text-navy mb-1"><span>Claridad conceptual</span><span>40%</span></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-emerald h-2 rounded-full progress-bar" style="width: 40%"></div></div></div>
-                        <div><div class="flex justify-between text-sm font-bold text-navy mb-1"><span>Argumentación crítica</span><span>40%</span></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-emerald h-2 rounded-full progress-bar" style="width: 40%"></div></div></div>
-                        <div><div class="flex justify-between text-sm font-bold text-navy mb-1"><span>Participación y retroalimentación</span><span>20%</span></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-cyan h-2 rounded-full progress-bar" style="width: 20%"></div></div></div>
-                    </div>
-                </div>
-
-                <div class="glass rounded-2xl p-8 border border-slate-200">
-                    <div class="w-12 h-12 bg-cyan/10 rounded-full flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-display font-bold text-navy mb-4">Tema del Foro</h3>
-                    <p class="text-sm text-slate-600 leading-relaxed mb-4"><strong>Adaptación de las entidades territoriales a entornos cambiantes:</strong> perspectivas desde la teoría organizacional y la gestión pública territorial.</p>
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded text-xs text-blue-800"><strong>Nota:</strong> El foro y el taller corresponden al 15% de la nota final. La evaluación es continua, acumulativa y formativa.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= GLOSARIO ================= -->
-    <section id="glosario" class="py-16 px-6 bg-white border-t border-slate-200">
-        <div class="max-w-5xl mx-auto" data-aos="fade-up">
-            <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Glosario de Términos Clave</h2>
-                <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass p-5 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-emerald mb-1">VUCA</h4>
-                    <p class="text-sm text-slate-600">Acrónimo de Volatilidad, Incertidumbre, Complejidad y Ambigüedad. Describe entornos cambiantes y difíciles de predecir.</p>
-                </div>
-                <div class="glass p-5 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-emerald mb-1">Gobernanza Multinivel</h4>
-                    <p class="text-sm text-slate-600">Coordinación y cooperación entre diferentes niveles de gobierno (nacional, departamental, municipal) para implementar políticas públicas.</p>
-                </div>
-                <div class="glass p-5 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-emerald mb-1">Burocracia Adaptativa</h4>
-                    <p class="text-sm text-slate-600">Modelo organizacional que se ajusta rápidamente a los cambios del entorno, priorizando el aprendizaje y la flexibilidad sobre la rigidez.</p>
-                </div>
-                <div class="glass p-5 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-emerald mb-1">Descentralización</h4>
-                    <p class="text-sm text-slate-600">Transferencia de competencias, recursos y poder desde el gobierno central hacia las entidades territoriales.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= BIBLIOGRAFÍA CON VISOR PDF ================= -->
-    <section id="bibliografia" class="py-24 px-6 bg-navy text-white">
-        <div class="max-w-6xl mx-auto" data-aos="fade-up">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Bibliografía y Recursos de Investigación</h2>
-                <p class="text-slate-300 max-w-2xl mx-auto">Textos clave del microcurrículo con acceso a PDF completo o préstamo digital gratuito.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- ========== SECCIÓN: INICIO ========== -->
+        <div id="inicio" class="content-section active">
+            <header class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-navy via-blue-900 to-slate-900 overflow-hidden">
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
                 
-                <!-- Harmon & Mayer -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Harmon & Mayer</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Teoría de la organización para la administración pública. México: FCE, 2001.</p>
-                    <button onclick="openPDF('http://biblioteca.icap.ac.cr/BLIVI/DOCUMENTOS_DIGITALES/Teor%C3%ADa%20de%20la%20organizaci%C3%B3n.pdf', 'Harmon & Mayer - Teoría de la Organización')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📄 Ver PDF Gratis
+                <div class="relative z-10 max-w-5xl mx-auto px-6 text-center" data-aos="fade-up" data-aos-duration="1000">
+                    <span class="inline-block py-1 px-3 rounded-full bg-emerald/20 text-emerald-300 text-sm font-semibold tracking-wider mb-6 border border-emerald/30">
+                        Foro Académico - ESAP
+                    </span>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white leading-tight mb-6">
+                        Adaptación de Entidades Territoriales a Entornos Cambiantes
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-10 font-light">
+                        Una exploración rigurosa desde la teoría organizacional y la gestión pública territorial. 
+                        Análisis de los desafíos de Sucre frente a la descentralización, gobernanza multinivel y burocracia adaptativa.
+                    </p>
+                    <button onclick="showSection('lecturas')" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-emerald rounded-full hover:bg-emerald-600 transition-all duration-300 shadow-lg shadow-emerald/30 hover:shadow-emerald/50 hover:-translate-y-1 cursor-pointer">
+                        Explorar las 5 Lecturas
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
                     </button>
                 </div>
+            </header>
+        </div>
 
-                <!-- Carlos Ramió -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Carlos Ramió</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Teoría de la Organización y Administración Pública. Madrid: Tecnos, 1999.</p>
-                    <button onclick="openPDF('https://repositorio.21.edu.ar/bitstream/handle/ues21/12817/Teoria%20de%20la%20organizacion%20y%20administracion%20publica.pdf', 'Ramió - Teoría de la Organización')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📄 Ver PDF Gratis
-                    </button>
+        <!-- ========== SECCIÓN: CONTEXTO ========== -->
+        <div id="contexto" class="content-section py-16 px-6 bg-white">
+            <div class="max-w-5xl mx-auto" data-aos="fade-up">
+                <div class="text-center mb-10">
+                    <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">¿Por qué analizar el contexto de Sucre?</h2>
+                    <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
                 </div>
-
-                <!-- Barry Bozeman -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Barry Bozeman</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Todas las Organizaciones son Públicas. México: Fondo de Cultura Económica, 1998.</p>
-                    <button onclick="openPDF('https://idoc.pub/download/todas-las-organizaciones-son-publicas-pnxkjk2w8g4v', 'Bozeman - Todas las Organizaciones son Públicas')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📄 Ver PDF Gratis
-                    </button>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-emerald mb-2 text-lg">Desafíos Territoriales</h3>
+                        <p class="text-sm text-slate-600">Sucre enfrenta retos únicos de coordinación entre sus municipios y el nivel nacional, lo que exige una gran capacidad de adaptación institucional.</p>
+                    </div>
+                    <div class="glass p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-emerald mb-2 text-lg">Descentralización Real</h3>
+                        <p class="text-sm text-slate-600">La dependencia de transferencias nacionales y la falta de autonomía fiscal son barreras críticas para el desarrollo local y la gobernanza.</p>
+                    </div>
+                    <div class="glass p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-emerald mb-2 text-lg">Potencial Adaptativo</h3>
+                        <p class="text-sm text-slate-600">Las entidades de Sucre tienen la oportunidad de implementar modelos de burocracia adaptativa y gobernanza en red para superar las crisis.</p>
+                    </div>
                 </div>
-
-                <!-- Max Weber -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Max Weber</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Economía y Sociedad. Análisis de la Burocracia Weberiana y su evolución.</p>
-                    <button onclick="openPDF('https://archive.org/details/economiaysocieda0000webe', 'Weber - Economía y Sociedad')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📖 Préstamo Digital
-                    </button>
-                </div>
-
-                <!-- Gareth Morgan -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Gareth Morgan</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Imágenes de la Organización. México: Editorial Alfaomega, 1991.</p>
-                    <button onclick="openPDF('https://archive.org/details/imagenesdelaorga0000morg', 'Morgan - Imágenes de la Organización')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📖 Préstamo Digital
-                    </button>
-                </div>
-
-                <!-- Powell & DiMaggio -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Powell & DiMaggio</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Nuevo Institucionalismo en el Análisis Organizacional. México: FCE, 2006.</p>
-                    <button onclick="openPDF('https://archive.org/details/elinstitucionalis0000powe', 'Powell & DiMaggio - Nuevo Institucionalismo')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📖 Préstamo Digital
-                    </button>
-                </div>
-
-                <!-- Mastering Public Administration -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Fry & Raadschelders</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Mastering Public Administration: From Max Weber to Dwight Waldo.</p>
-                    <button onclick="openPDF('https://archive.org/details/masteringpublica00fryb', 'Fry & Raadschelders - Mastering Public Administration')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📖 Préstamo Digital
-                    </button>
-                </div>
-
-                <!-- SAGE Handbook -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">B. Guy Peters</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">The SAGE Handbook of Public Administration. Sección 3: Organization Theory.</p>
-                    <button onclick="openPDF('https://archive.org/details/sagehandbookofpu0000pete', 'SAGE Handbook of Public Administration')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📖 Préstamo Digital
-                    </button>
-                </div>
-
-                <!-- Public Administration Essentials (OER) -->
-                <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
-                    <h4 class="font-bold text-emerald mb-2">Jayme Renfro (OER)</h4>
-                    <p class="text-sm text-slate-300 mb-4 flex-grow">Public Administration: The Essentials. Universidad de Northern Iowa.</p>
-                    <button onclick="openPDF('https://scholarworks.uni.edu/cgi/viewcontent.cgi?article=1627&context=facbook', 'Renfro - Public Administration: The Essentials')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
-                        📄 Ver PDF Gratis (OER)
-                    </button>
-                </div>
-
             </div>
         </div>
-    </section>
 
-    <!-- ================= FOOTER ================= -->
-    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
-        <p>&copy; 2026 ESAP - Escuela Superior de Administración Pública. CETAP Sincelejo.</p>
-        <p class="mt-2">Diseño de Interfaz UI/UX de Alto Impacto con Visor PDF Integrado.</p>
-    </footer>
+        <!-- ========== SECCIÓN: GRUPOS ========== -->
+        <div id="grupos" class="content-section py-16 px-6 bg-slate-50">
+            <div class="max-w-5xl mx-auto" data-aos="fade-up">
+                <div class="text-center mb-10">
+                    <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Grupos de Trabajo (CIPA)</h2>
+                    <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
+                        <h3 class="font-bold text-navy text-lg mb-2">CIPA 1 - Alcaldía de Sincelejo</h3>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• Julieth Camila Navarro Pérez</li>
+                            <li>• Alvaro José Suarez Torres</li>
+                            <li>• Brayan Andrés Cera Pérez</li>
+                            <li>• Helen Sofia Silgado Ortega</li>
+                        </ul>
+                    </div>
+                    <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
+                        <h3 class="font-bold text-navy text-lg mb-2">CIPA 2 - Alcaldía de Chinú</h3>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• Alberto José Palencia Molina</li>
+                            <li>• Katty del Carmen Vélez Álvarez</li>
+                            <li>• María José Álvarez Montes</li>
+                        </ul>
+                    </div>
+                    <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
+                        <h3 class="font-bold text-navy text-lg mb-2">CIPA 3 - Alcaldía de Sucre</h3>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• Roberto Gómez Marriaga</li>
+                            <li>• Eduin Manuel Vargas Lara</li>
+                            <li>• Fernando Andrés Vergara Rodríguez</li>
+                            <li>• Stivenson Andrés Barreto Mercado</li>
+                            <li>• Marisol Velasquez Suarez</li>
+                        </ul>
+                    </div>
+                    <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
+                        <h3 class="font-bold text-navy text-lg mb-2">CIPA 4 - Alcaldía de Tuchín</h3>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• Yulisa Andrea Flores Mendoza</li>
+                            <li>• Laura Vanessa Bravo Pérez</li>
+                            <li>• Liliana Andrea Ibañez Muentes</li>
+                            <li>• Luis Eduardo Ricardo Diaz</li>
+                        </ul>
+                    </div>
+                    <div class="glass p-5 rounded-xl border border-slate-200 card-hover">
+                        <h3 class="font-bold text-navy text-lg mb-2">CIPA 5 - Alcaldía de Tolú</h3>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• Víctor José Arroyo Orozco</li>
+                            <li>• Coni Michel Bertel Ricardo</li>
+                            <li>• Martha Lucia Oviedo Páez</li>
+                            <li>• Sergio Manuel Martínez Narvaez</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SECCIÓN: TALLER ========== -->
+        <div id="taller" class="content-section py-16 px-6 bg-white">
+            <div class="max-w-5xl mx-auto" data-aos="fade-up">
+                <div class="text-center mb-10">
+                    <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Taller: Análisis de la Estructura Orgánica</h2>
+                    <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
+                    <p class="text-slate-500 mt-4 max-w-2xl mx-auto">Instrumento de levantamiento de datos para el análisis de la organización formal e informal en alcaldías del Departamento de Sucre.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <h3 class="font-display font-bold text-navy">Parte A: Identificación de la Entidad Territorial</h3>
+                            <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
+                            <p><strong>Ítems a diligenciar:</strong> Nombre de la Alcaldía, Municipio, Categoría municipal (Ley 617 de 2000), Número de habitantes (DANE), Fuente del organigrama (Decreto/Acuerdo), Fecha del acto administrativo.</p>
+                            <p class="text-xs bg-blue-50 p-3 rounded border-l-4 border-blue-400"><strong>Nota metodológica:</strong> La categoría municipal determina la complejidad de la estructura administrativa. Municipios de menor categoría tienden a estructuras más simples.</p>
+                        </div>
+                    </details>
+
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <h3 class="font-display font-bold text-navy">Parte B: Organización Formal – Estructura Jerárquica</h3>
+                            <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
+                            <p><strong>B.1. Niveles jerárquicos:</strong> Marque los niveles identificados (Directivo, Asesor, Ejecutivo, etc.) y dependencias por nivel.</p>
+                            <p><strong>B.2. Dependencias identificadas:</strong> Complete el cuadro con nombre, nivel jerárquico y funciones principales (Ej: Despacho del Alcalde - Directivo - Dirección administrativa).</p>
+                            <p class="text-xs text-slate-500">Tipologías comunes: Gobierno, Hacienda, Planeación, Infraestructura, Desarrollo Social, Salud, Educación, Ambiente.</p>
+                        </div>
+                    </details>
+
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <h3 class="font-display font-bold text-navy">Parte C: Organización Formal – Estructura Funcional</h3>
+                            <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
+                            <p><strong>C.1. División funcional:</strong> Identifique la dependencia responsable de cada sector (Hacienda, Planeación, Salud, Educación, etc.).</p>
+                            <p><strong>C.2. Líneas de autoridad y comunicación:</strong> Analice la jefatura superior, reportes de secretarios, flujo de comunicación y dependencias de control.</p>
+                            <p class="text-xs bg-slate-50 p-3 rounded"><strong>Marco normativo:</strong> Constitución Política Art. 315, Ley 136 de 1994, Ley 489 de 1998.</p>
+                        </div>
+                    </details>
+
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <h3 class="font-display font-bold text-navy">Parte D: Organización Informal</h3>
+                            <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
+                            <p><strong>D.1. Elementos informales:</strong> Identifique grupos de afinidad política, redes no formales, liderazgos informales, alianzas, resistencia al cambio.</p>
+                            <p><strong>D.2. Tensión formal vs. informal:</strong> Analice la toma de decisiones, comunicación, reconocimiento y distribución de tareas.</p>
+                            <p class="text-xs bg-emerald/10 p-3 rounded text-emerald-800"><strong>Aporte teórico (Elton Mayo):</strong> La organización informal surge de las relaciones sociales y puede satisfacer necesidades que la formal no cubre.</p>
+                        </div>
+                    </details>
+
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <h3 class="font-display font-bold text-navy">Parte E y F: Síntesis Analítica y Conclusiones</h3>
+                            <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
+                            <p><strong>E.1. Matriz DOFA:</strong> Fortalezas, Debilidades, Oportunidades y Amenazas de la estructura organizacional.</p>
+                            <p><strong>E.2. Preguntas de análisis crítico:</strong> ¿Responde a las necesidades? ¿Qué tipo de estructura predomina? ¿Cómo influye la organización informal? ¿Qué reformas se sugieren? ¿Cómo se relaciona con Taylor, Fayol y Weber?</p>
+                            <p><strong>F. Conclusiones del Grupo:</strong> Hallazgos sobre organización formal e informal, relación con el contexto de Sucre y aprendizajes del taller.</p>
+                        </div>
+                    </details>
+
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <summary class="flex items-center justify-between p-5 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <h3 class="font-display font-bold text-navy">Rúbrica de Evaluación e Instrucciones del Foro Moodle</h3>
+                            <svg class="w-5 h-5 text-emerald arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 text-sm text-slate-600 space-y-3">
+                            <p><strong>Rúbrica:</strong> Identificación estructura formal (25%), Análisis organización informal (20%), Aplicación referentes teóricos (20%), Capacidad analítica y propuesta (20%), Trabajo en equipo (15%).</p>
+                            <p><strong>Foro Moodle:</strong> Título: "Organización formal e informal en las alcaldías del Departamento de Sucre". Consigna: 3 preguntas. Requisitos: Mínimo 500 palabras, 2 comentarios a compañeros, citación APA 7ª ed.</p>
+                            <p class="text-xs bg-yellow-50 p-3 rounded border-l-4 border-yellow-400"><strong>Fecha límite:</strong> 28 de septiembre de 2026.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SECCIÓN: LECTURAS ========== -->
+        <div id="lecturas" class="content-section py-16 px-6">
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-4xl font-display font-bold text-navy mb-4">Lecturas Rigurosas para el Foro</h2>
+                    <div class="w-24 h-1 bg-emerald mx-auto rounded-full mb-6"></div>
+                    <p class="text-slate max-w-2xl mx-auto">Toca sobre cada lectura para expandirla, leer su descripción y abrir el PDF completo en el visor integrado.</p>
+                    
+                    <!-- Barra de Progreso -->
+                    <div class="mt-8 max-w-md mx-auto bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between text-xs font-bold text-navy mb-2">
+                            <span>Progreso de Lectura</span>
+                            <span id="progress-text">0 de 5 leídas</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-3">
+                            <div id="progress-bar-fill" class="bg-emerald h-3 rounded-full progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- LECTURA 1 -->
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 1</span>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">La arquitectura institucional de la descentralización en Colombia</h3>
+                                    <p class="text-xs text-slate-500 font-medium mt-1">Revista BioAdministración (DAFP) - Edición 5</p>
+                                </div>
+                            </div>
+                            <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-6 border-t border-slate-100 bg-white/80">
+                            <div class="mb-4">
+                                <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                                <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                                    <li>Identifica cinco fallas estructurales del sistema descentralizado colombiano.</li>
+                                    <li>Analiza la recentralización silenciosa y la alta carga administrativa en alcaldías.</li>
+                                    <li>Propone la necesidad de un sistema competencial claro para la adaptabilidad territorial.</li>
+                                </ul>
+                            </div>
+                            <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de revista institucional</span>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                Diagnóstico crítico que identifica cinco fallas estructurales: ausencia de sistema competencial, recentralización silenciosa, falta de visión diferenciada, coordinación multinivel débil y alta carga administrativa. Ideal para analizar las rigideces institucionales en alcaldías y gobernaciones.
+                            </p>
+                            <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
+                                <strong>Pregunta Orientadora:</strong> "¿Cuáles de las cinco fallas estructurales identificadas en la lectura explican mejor la dificultad de las entidades territoriales de Sucre para adaptarse a entornos cambiantes?"
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Revista-BioAdministracion-5ed.pdf', 'Lectura 1: Arquitectura de la Descentralización')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    📄 Ver PDF Completo
+                                </button>
+                                <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
+                                    📖 Marcar como leída
+                                </button>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- LECTURA 2 -->
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 2</span>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">Comunicación organizacional y gestión del cambio</h3>
+                                    <p class="text-xs text-slate-500 font-medium mt-1">Marcy Sarely Portocarrero Torres (2025)</p>
+                                </div>
+                            </div>
+                            <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-6 border-t border-slate-100 bg-white/80">
+                            <div class="mb-4">
+                                <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                                <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                                    <li>La comunicación organizacional es un pilar fundamental para la modernización institucional.</li>
+                                    <li>El liderazgo y la eficiencia organizacional determinan el éxito de la adaptación al cambio.</li>
+                                    <li>Aplicable al contexto colombiano para mejorar la gestión en alcaldías municipales.</li>
+                                </ul>
+                            </div>
+                            <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Tesis de grado</span>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                Estudio en un municipio peruano aplicable al contexto colombiano. Evidencia que la comunicación efectiva, el liderazgo y la eficiencia organizacional son determinantes para la modernización institucional y la adaptación al cambio.
+                            </p>
+                            <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
+                                <strong>Pregunta Orientadora:</strong> "¿Qué estrategias de comunicación organizacional podrían implementarse en una alcaldía de Sucre para mejorar su capacidad de adaptación al cambio?"
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Marcy%20Sarely%20Portocarrero%20Torres%20-%20FECICO%20%281%29.pdf', 'Lectura 2: Comunicación y Gestión del Cambio')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    📄 Ver PDF Completo
+                                </button>
+                                <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
+                                    📖 Marcar como leída
+                                </button>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- LECTURA 3 -->
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 3</span>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">Capacidades institucionales en municipios PDET</h3>
+                                    <p class="text-xs text-slate-500 font-medium mt-1">Repositorio Institucional ESAP</p>
+                                </div>
+                            </div>
+                            <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-6 border-t border-slate-100 bg-white/80">
+                            <div class="mb-4">
+                                <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                                <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                                    <li>Analiza las capacidades administrativas, políticas y transversales en municipios PDET.</li>
+                                    <li>La debilidad en estas capacidades explica los rezagos en la implementación de políticas.</li>
+                                    <li>Fortalecer estas capacidades es urgente para mejorar la adaptabilidad territorial.</li>
+                                </ul>
+                            </div>
+                            <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de investigación</span>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                Analiza las capacidades administrativas, políticas y transversales en municipios PDET. Concluye que la debilidad en estas capacidades explica los rezagos en la implementación de políticas territoriales y la adaptabilidad.
+                            </p>
+                            <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
+                                <strong>Pregunta Orientadora:</strong> "¿Qué capacidades institucionales específicas son más urgentes de fortalecer en las entidades territoriales de Sucre para que puedan adaptarse a entornos cambiantes?"
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Tesis_Medrano%20Rincon%20Jenny%20A.pdf', 'Lectura 3: Capacidades Institucionales en Municipios PDET')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    📄 Ver PDF Completo
+                                </button>
+                                <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
+                                    📖 Marcar como leída
+                                </button>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- LECTURA 4 -->
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 4</span>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">Gobernanza del agua en La Mojana</h3>
+                                    <p class="text-xs text-slate-500 font-medium mt-1">Triana, Acuña & Ruiz (2025) - Inst. Humboldt</p>
+                                </div>
+                            </div>
+                            <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-6 border-t border-slate-100 bg-white/80">
+                            <div class="mb-4">
+                                <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                                <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                                    <li>La Mojana es un territorio hidrosocial comparable con la realidad de Sucre.</li>
+                                    <li>Propone la gobernanza adaptativa participativa y el aprendizaje social como clave.</li>
+                                    <li>La resiliencia territorial depende de la transformación socioecológica y la participación.</li>
+                                </ul>
+                            </div>
+                            <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de investigación</span>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                La Mojana como territorio hidrosocial comparable con Sucre. Propone la gobernanza adaptativa participativa y el aprendizaje social como clave para la resiliencia territorial y la transformación socioecológica.
+                            </p>
+                            <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
+                                <strong>Pregunta Orientadora:</strong> "¿Qué elementos de la gobernanza adaptativa participativa propuesta para La Mojana podrían aplicarse a las entidades territoriales de Sucre?"
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/MIA%2BVOL%2B22%2BNO%2B2%2BOCTUBER%2B2025%2B109-121.pdf', 'Lectura 4: Gobernanza del Agua en La Mojana')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    📄 Ver PDF Completo
+                                </button>
+                                <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
+                                    📖 Marcar como leída
+                                </button>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- LECTURA 5 -->
+                    <details class="group glass rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300" data-aos="fade-up">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer bg-white/50 hover:bg-emerald/5 transition-colors">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <span class="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap mt-1 sm:mt-0">Lectura 5</span>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-display font-bold text-navy leading-tight">From Weberian Bureaucracy to Adaptive Bureaucracy</h3>
+                                    <p class="text-xs text-slate-500 font-medium mt-1">Garuda - Repositorio Académico Indonesio</p>
+                                </div>
+                            </div>
+                            <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-6 border-t border-slate-100 bg-white/80">
+                            <div class="mb-4">
+                                <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                                <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                                    <li>Mapea la evolución de la burocracia weberiana hacia un modelo adaptativo.</li>
+                                    <li>Propone 5 pilares: estructura ambidiestra, aprendizaje ágil, gobernanza en red, capacidades digitales y resiliencia.</li>
+                                    <li>Conecta directamente con los desafíos de las entidades territoriales en contextos VUCA.</li>
+                                </ul>
+                            </div>
+                            <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de revisión integrativa</span>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                Mapea la evolución hacia la burocracia adaptativa en contextos VUCA. Propone 5 pilares: estructura ambidiestra, aprendizaje ágil, gobernanza en red, capacidades digitales y resiliencia.
+                            </p>
+                            <div class="bg-emerald/10 border-l-4 border-emerald p-4 rounded text-sm text-emerald-800 italic mb-4">
+                                <strong>Pregunta Orientadora:</strong> "De los cinco pilares de la burocracia adaptativa propuestos, ¿cuál consideras más urgente de desarrollar en las entidades territoriales colombianas y por qué?"
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="openPDF('https://pub-10d2fdc21dd64db685df4c15c64e0c1e.r2.dev/Trabajo%20de%20grado.pdf', 'Lectura 5: Burocracia Adaptativa')" class="btn-pdf flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    📄 Ver PDF Completo
+                                </button>
+                                <button onclick="toggleRead(this)" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-slate-200 text-slate-700 hover:bg-slate-300 transition-colors">
+                                    📖 Marcar como leída
+                                </button>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Síntesis e Instrucciones dentro de Lecturas -->
+                <div class="mt-16">
+                    <h3 class="text-xl md:text-2xl font-display font-bold text-navy text-center mb-6">Síntesis Comparativa e Instrucciones</h3>
+                    
+                    <div class="overflow-x-auto rounded-2xl shadow-xl border border-slate-200 bg-white mb-8">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <thead>
+                                <tr class="bg-navy text-white">
+                                    <th class="p-4 font-display font-bold text-sm uppercase tracking-wider">#</th>
+                                    <th class="p-4 font-display font-bold text-sm uppercase tracking-wider">Lectura</th>
+                                    <th class="p-4 font-display font-bold text-sm uppercase tracking-wider">Nivel</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-emerald/5"><td class="p-4 font-bold text-navy">1</td><td class="p-4 text-slate-700">Arquitectura de la descentralización</td><td class="p-4"><span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">Macro</span></td></tr>
+                                <tr class="hover:bg-emerald/5"><td class="p-4 font-bold text-navy">2</td><td class="p-4 text-slate-700">Comunicación y gestión del cambio</td><td class="p-4"><span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">Micro</span></td></tr>
+                                <tr class="hover:bg-emerald/5"><td class="p-4 font-bold text-navy">3</td><td class="p-4 text-slate-700">Capacidades institucionales PDET</td><td class="p-4"><span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-bold">Meso</span></td></tr>
+                                <tr class="hover:bg-emerald/5"><td class="p-4 font-bold text-navy">4</td><td class="p-4 text-slate-700">Gobernanza adaptativa La Mojana</td><td class="p-4"><span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-bold">Meso</span></td></tr>
+                                <tr class="hover:bg-emerald/5"><td class="p-4 font-bold text-navy">5</td><td class="p-4 text-slate-700">Burocracia adaptativa</td><td class="p-4"><span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">Macro</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="glass rounded-2xl p-6 border border-slate-200">
+                            <h4 class="font-display font-bold text-navy mb-4">Instrucciones del Foro</h4>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li>• Leer las 5 lecturas asignadas.</li>
+                                <li>• Identificar 3 ideas clave de cada lectura.</li>
+                                <li>• Conectar con el contexto de Sucre.</li>
+                                <li>• Responder a la pregunta orientadora.</li>
+                                <li>• Comentar al menos 2 aportes de otros grupos.</li>
+                                <li>• Extensión mínima: 500 palabras.</li>
+                                <li>• Uso obligatorio de normas APA.</li>
+                            </ul>
+                        </div>
+                        <div class="glass rounded-2xl p-6 border border-slate-200">
+                            <h4 class="font-display font-bold text-navy mb-4">Criterios de Evaluación</h4>
+                            <div class="space-y-4">
+                                <div><div class="flex justify-between text-xs font-bold text-navy mb-1"><span>Claridad conceptual</span><span>40%</span></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-emerald h-2 rounded-full" style="width: 40%"></div></div></div>
+                                <div><div class="flex justify-between text-xs font-bold text-navy mb-1"><span>Argumentación crítica</span><span>40%</span></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-emerald h-2 rounded-full" style="width: 40%"></div></div></div>
+                                <div><div class="flex justify-between text-xs font-bold text-navy mb-1"><span>Participación</span><span>20%</span></div><div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-cyan h-2 rounded-full" style="width: 20%"></div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SECCIÓN: GLOSARIO ========== -->
+        <div id="glosario" class="content-section py-16 px-6 bg-white">
+            <div class="max-w-5xl mx-auto" data-aos="fade-up">
+                <div class="text-center mb-10">
+                    <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Glosario de Términos Clave</h2>
+                    <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-emerald mb-1">VUCA</h4>
+                        <p class="text-sm text-slate-600">Acrónimo de Volatilidad, Incertidumbre, Complejidad y Ambigüedad. Describe entornos cambiantes y difíciles de predecir.</p>
+                    </div>
+                    <div class="glass p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-emerald mb-1">Gobernanza Multinivel</h4>
+                        <p class="text-sm text-slate-600">Coordinación y cooperación entre diferentes niveles de gobierno (nacional, departamental, municipal) para implementar políticas públicas.</p>
+                    </div>
+                    <div class="glass p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-emerald mb-1">Burocracia Adaptativa</h4>
+                        <p class="text-sm text-slate-600">Modelo organizacional que se ajusta rápidamente a los cambios del entorno, priorizando el aprendizaje y la flexibilidad sobre la rigidez.</p>
+                    </div>
+                    <div class="glass p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-emerald mb-1">Descentralización</h4>
+                        <p class="text-sm text-slate-600">Transferencia de competencias, recursos y poder desde el gobierno central hacia las entidades territoriales.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SECCIÓN: BIBLIOGRAFÍA ========== -->
+        <div id="bibliografia" class="content-section py-16 px-6 bg-navy text-white min-h-[calc(100vh-4rem)]">
+            <div class="max-w-6xl mx-auto" data-aos="fade-up">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Bibliografía y Recursos de Investigación</h2>
+                    <p class="text-slate-300 max-w-2xl mx-auto">Textos clave del microcurrículo con acceso a PDF completo o préstamo digital gratuito.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Harmon & Mayer</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Teoría de la organización para la administración pública. México: FCE, 2001.</p>
+                        <button onclick="openPDF('http://biblioteca.icap.ac.cr/BLIVI/DOCUMENTOS_DIGITALES/Teor%C3%ADa%20de%20la%20organizaci%C3%B3n.pdf', 'Harmon & Mayer - Teoría de la Organización')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📄 Ver PDF Gratis
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Carlos Ramió</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Teoría de la Organización y Administración Pública. Madrid: Tecnos, 1999.</p>
+                        <button onclick="openPDF('https://repositorio.21.edu.ar/bitstream/handle/ues21/12817/Teoria%20de%20la%20organizacion%20y%20administracion%20publica.pdf', 'Ramió - Teoría de la Organización')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📄 Ver PDF Gratis
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Barry Bozeman</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Todas las Organizaciones son Públicas. México: Fondo de Cultura Económica, 1998.</p>
+                        <button onclick="openPDF('https://idoc.pub/download/todas-las-organizaciones-son-publicas-pnxkjk2w8g4v', 'Bozeman - Todas las Organizaciones son Públicas')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📄 Ver PDF Gratis
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Max Weber</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Economía y Sociedad. Análisis de la Burocracia Weberiana y su evolución.</p>
+                        <button onclick="openPDF('https://archive.org/details/economiaysocieda0000webe', 'Weber - Economía y Sociedad')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📖 Préstamo Digital
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Gareth Morgan</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Imágenes de la Organización. México: Editorial Alfaomega, 1991.</p>
+                        <button onclick="openPDF('https://archive.org/details/imagenesdelaorga0000morg', 'Morgan - Imágenes de la Organización')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📖 Préstamo Digital
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Powell & DiMaggio</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Nuevo Institucionalismo en el Análisis Organizacional. México: FCE, 2006.</p>
+                        <button onclick="openPDF('https://archive.org/details/elinstitucionalis0000powe', 'Powell & DiMaggio - Nuevo Institucionalismo')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📖 Préstamo Digital
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Fry & Raadschelders</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Mastering Public Administration: From Max Weber to Dwight Waldo.</p>
+                        <button onclick="openPDF('https://archive.org/details/masteringpublica00fryb', 'Fry & Raadschelders - Mastering Public Administration')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📖 Préstamo Digital
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">B. Guy Peters</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">The SAGE Handbook of Public Administration. Sección 3: Organization Theory.</p>
+                        <button onclick="openPDF('https://archive.org/details/sagehandbookofpu0000pete', 'SAGE Handbook of Public Administration')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📖 Préstamo Digital
+                        </button>
+                    </div>
+
+                    <div class="glass-dark p-6 rounded-xl border border-slate-700 hover:border-emerald transition-colors flex flex-col">
+                        <h4 class="font-bold text-emerald mb-2">Jayme Renfro (OER)</h4>
+                        <p class="text-sm text-slate-300 mb-4 flex-grow">Public Administration: The Essentials. Universidad de Northern Iowa.</p>
+                        <button onclick="openPDF('https://scholarworks.uni.edu/cgi/viewcontent.cgi?article=1627&context=facbook', 'Renfro - Public Administration: The Essentials')" class="btn-pdf w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-2">
+                            📄 Ver PDF Gratis (OER)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center text-slate-400 text-sm mt-12">
+                    <p>&copy; 2026 ESAP - Escuela Superior de Administración Pública. CETAP Sincelejo.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <!-- ================= MODAL VISOR PDF ================= -->
     <div id="pdfModal">
-        <!-- Barra superior -->
         <div class="flex items-center justify-between px-6 py-4 bg-navy border-b border-slate-700">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-emerald/20 rounded-lg flex items-center justify-center">
@@ -866,11 +814,10 @@
             </div>
             <button onclick="closePDF()" class="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors shadow-lg">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                Volver al Inicio
+                Volver
             </button>
         </div>
 
-        <!-- Controles -->
         <div class="pdf-controls flex items-center justify-center gap-3 px-6 py-3 bg-navy/80 border-b border-slate-700 flex-wrap">
             <button id="prevPage" onclick="changePage(-1)" class="px-4 py-2 bg-slate-700 hover:bg-emerald rounded-lg text-white text-sm font-bold flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -893,7 +840,6 @@
             </a>
         </div>
 
-        <!-- Área del PDF -->
         <div class="flex-grow overflow-auto flex items-start justify-center p-6 bg-slate-900/50" id="pdfContainer">
             <div id="pdfLoader" class="flex flex-col items-center justify-center py-20 text-white">
                 <div class="loader mb-4"></div>
@@ -903,7 +849,7 @@
             <div id="pdfError" class="hidden text-center py-20">
                 <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 <h3 class="text-white font-bold text-lg mb-2">No se pudo cargar el PDF directamente</h3>
-                <p class="text-slate-300 text-sm mb-6 max-w-md mx-auto">El documento puede tener restricciones de acceso. Puedes abrirlo en una nueva pestaña o intentar desde el enlace original.</p>
+                <p class="text-slate-300 text-sm mb-6 max-w-md mx-auto">El documento puede tener restricciones de acceso. Puedes abrirlo en una nueva pestaña.</p>
                 <a id="fallbackLink" href="#" target="_blank" class="inline-block px-6 py-3 bg-emerald hover:bg-emerald-600 rounded-lg text-white font-bold transition-colors">
                     🔗 Abrir en Nueva Pestaña
                 </a>
@@ -1001,12 +947,7 @@
             const newPage = pageNum + delta;
             if (newPage < 1 || newPage > pdfDoc.numPages) return;
             pageNum = newPage;
-            
-            if (pageRendering) {
-                pageNumPending = newPage;
-            } else {
-                renderPage(newPage);
-            }
+            if (pageRendering) { pageNumPending = newPage; } else { renderPage(newPage); }
         }
 
         function zoomPDF(delta) {
@@ -1029,9 +970,7 @@
         document.querySelectorAll('#lecturas details, #taller details').forEach((targetDetail) => {
             targetDetail.addEventListener('click', () => {
                 document.querySelectorAll('#lecturas details, #taller details').forEach((detail) => {
-                    if (detail !== targetDetail) {
-                        detail.removeAttribute('open');
-                    }
+                    if (detail !== targetDetail) { detail.removeAttribute('open'); }
                 });
             });
         });
@@ -1055,6 +994,35 @@
             } else {
                 themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
             }
+        });
+
+        // ===== SPA: Cambio de secciones =====
+        function showSection(id) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            // Mostrar la sección seleccionada
+            const target = document.getElementById(id);
+            if (target) target.classList.add('active');
+            
+            // Actualizar enlaces activos
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('active', link.dataset.section === id);
+            });
+            
+            // Scroll al top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Guardar sección actual en localStorage
+            localStorage.setItem('currentSection', id);
+            
+            // Reiniciar animaciones AOS en la nueva sección visible
+            setTimeout(() => AOS.refresh(), 100);
+        }
+
+        // Restaurar última sección visitada al cargar
+        window.addEventListener('load', () => {
+            const lastSection = localStorage.getItem('currentSection') || 'inicio';
+            showSection(lastSection);
         });
 
         // ===== Lógica de Barra de Progreso y Lecturas Leídas =====
@@ -1082,27 +1050,6 @@
             updateProgress();
         }
 
-        // ===== Detectar sección activa para resaltar el menú =====
-        const sections = document.querySelectorAll('section[id], header[id], main[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (window.scrollY >= sectionTop - 100) {
-                    current = section.getAttribute('id');
-                }
-            });
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // Inicializar la barra de progreso al cargar la página
         updateProgress();
     </script>
 </body>
