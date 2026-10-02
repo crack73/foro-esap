@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
-</head><head>
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foro: Adaptación de Entidades Territoriales a Entornos Cambiantes</title>
@@ -125,152 +126,11 @@
 
         /* ===== MODO OSCURO ===== */
         body.dark-mode {
-            background-color: #0f172a !important;
-            color: #cbd5e1 !important;
+            background-color: #0f172a !important; /* slate-900 */
+            color: #cbd5e1 !important; /* slate-300 */
         }
         body.dark-mode .bg-white, body.dark-mode .bg-slate-50, body.dark-mode .bg-white\/80, body.dark-mode .bg-white\/50 {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-        }
-        body.dark-mode .glass {
-            background: rgba(30, 41, 59, 0.8) !important;
-            border-color: rgba(71, 85, 105, 0.5) !important;
-        }
-        body.dark-mode .text-navy {
-            color: #f8fafc !important;
-        }
-        body.dark-mode .text-slate-600, body.dark-mode .text-slate-500 {
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foro: Adaptación de Entidades Territoriales a Entornos Cambiantes</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- AOS (Animate on Scroll) -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <!-- PDF.js (Mozilla) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: '#0A2540',
-                        slate: '#475569',
-                        emerald: '#10B981',
-                        cyan: '#06B6D4',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-        .glass-dark {
-            background: rgba(10, 37, 64, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        /* Hover Premium Tarjetas */
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .card-hover:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px -15px rgba(10, 37, 64, 0.15);
-            border-top: 4px solid #10B981;
-        }
-        /* Acordeón de Pregunta */
-        details > summary { list-style: none; cursor: pointer; }
-        details > summary::-webkit-details-marker { display: none; }
-        details[open] .arrow-icon { transform: rotate(180deg); }
-        details[open] .question-content { animation: fadeInDown 0.3s ease-out; }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Barra de progreso animada */
-        .progress-bar { transition: width 1.5s ease-in-out; }
-        
-        /* ===== VISOR PDF MODAL ===== */
-        #pdfModal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: rgba(10, 37, 64, 0.95);
-            backdrop-filter: blur(8px);
-        }
-        #pdfModal.active { display: flex; flex-direction: column; }
-        
-        #pdfCanvas {
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border-radius: 8px;
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .pdf-controls button {
-            transition: all 0.2s ease;
-        }
-        .pdf-controls button:hover {
-            transform: scale(1.05);
-        }
-        .pdf-controls button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        
-        /* Loader */
-        .loader {
-            border: 4px solid rgba(255,255,255,0.2);
-            border-top: 4px solid #10B981;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Botón PDF en tarjetas */
-        .btn-pdf {
-            background: linear-gradient(135deg, #0A2540 0%, #1e3a5f 100%);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .btn-pdf:hover {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-        }
-
-        /* ===== MODO OSCURO ===== */
-        body.dark-mode {
-            background-color: #0f172a !important;
-            color: #cbd5e1 !important;
-        }
-        body.dark-mode .bg-white, body.dark-mode .bg-slate-50, body.dark-mode .bg-white\/80, body.dark-mode .bg-white\/50 {
-            background-color: #1e293b !important;
+            background-color: #1e293b !important; /* slate-800 */
             border-color: #334155 !important;
         }
         body.dark-mode .glass {
@@ -294,12 +154,13 @@
             border: 1px solid #334155;
         }
     </style>
-</head>       
-
-        
-    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
+
+    <!-- Botón Modo Oscuro -->
+    <button id="theme-toggle" class="fixed top-4 right-4 z-50 bg-navy text-white p-3 rounded-full shadow-lg hover:bg-emerald transition-colors" title="Cambiar tema">
+        <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+    </button>
 
     <!-- ================= HERO SECTION ================= -->
     <header class="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-navy via-blue-900 to-slate-900 overflow-hidden">
@@ -322,6 +183,7 @@
             </a>
         </div>
     </header>
+
     <!-- ================= CONTEXTO DE SUCRE ================= -->
     <section class="py-16 px-6 bg-white border-b border-slate-200">
         <div class="max-w-5xl mx-auto" data-aos="fade-up">
@@ -369,6 +231,15 @@
                     <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
                 <div class="p-6 border-t border-slate-100 bg-white/80">
+                    <!-- Resumen RAE -->
+                    <div class="mb-4">
+                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                            <li>Identifica cinco fallas estructurales del sistema descentralizado colombiano.</li>
+                            <li>Analiza la recentralización silenciosa y la alta carga administrativa en alcaldías.</li>
+                            <li>Propone la necesidad de un sistema competencial claro para la adaptabilidad territorial.</li>
+                        </ul>
+                    </div>
                     <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de revista institucional</span>
                     <p class="text-sm text-slate-600 leading-relaxed mb-4">
                         Diagnóstico crítico que identifica cinco fallas estructurales: ausencia de sistema competencial, recentralización silenciosa, falta de visión diferenciada, coordinación multinivel débil y alta carga administrativa. Ideal para analizar las rigideces institucionales en alcaldías y gobernaciones.
@@ -396,6 +267,15 @@
                     <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
                 <div class="p-6 border-t border-slate-100 bg-white/80">
+                    <!-- Resumen RAE -->
+                    <div class="mb-4">
+                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                            <li>La comunicación organizacional es un pilar fundamental para la modernización institucional.</li>
+                            <li>El liderazgo y la eficiencia organizacional determinan el éxito de la adaptación al cambio.</li>
+                            <li>Aplicable al contexto colombiano para mejorar la gestión en alcaldías municipales.</li>
+                        </ul>
+                    </div>
                     <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Tesis de grado</span>
                     <p class="text-sm text-slate-600 leading-relaxed mb-4">
                         Estudio en un municipio peruano aplicable al contexto colombiano. Evidencia que la comunicación efectiva, el liderazgo y la eficiencia organizacional son determinantes para la modernización institucional y la adaptación al cambio.
@@ -423,6 +303,15 @@
                     <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
                 <div class="p-6 border-t border-slate-100 bg-white/80">
+                    <!-- Resumen RAE -->
+                    <div class="mb-4">
+                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                            <li>Analiza las capacidades administrativas, políticas y transversales en municipios PDET.</li>
+                            <li>La debilidad en estas capacidades explica los rezagos en la implementación de políticas.</li>
+                            <li>Fortalecer estas capacidades es urgente para mejorar la adaptabilidad territorial.</li>
+                        </ul>
+                    </div>
                     <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de investigación</span>
                     <p class="text-sm text-slate-600 leading-relaxed mb-4">
                         Analiza las capacidades administrativas, políticas y transversales en municipios PDET. Concluye que la debilidad en estas capacidades explica los rezagos en la implementación de políticas territoriales y la adaptabilidad.
@@ -450,6 +339,15 @@
                     <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
                 <div class="p-6 border-t border-slate-100 bg-white/80">
+                    <!-- Resumen RAE -->
+                    <div class="mb-4">
+                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                            <li>La Mojana es un territorio hidrosocial comparable con la realidad de Sucre.</li>
+                            <li>Propone la gobernanza adaptativa participativa y el aprendizaje social como clave.</li>
+                            <li>La resiliencia territorial depende de la transformación socioecológica y la participación.</li>
+                        </ul>
+                    </div>
                     <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de investigación</span>
                     <p class="text-sm text-slate-600 leading-relaxed mb-4">
                         La Mojana como territorio hidrosocial comparable con Sucre. Propone la gobernanza adaptativa participativa y el aprendizaje social como clave para la resiliencia territorial y la transformación socioecológica.
@@ -477,6 +375,15 @@
                     <svg class="w-6 h-6 text-emerald arrow-icon transition-transform duration-300 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
                 <div class="p-6 border-t border-slate-100 bg-white/80">
+                    <!-- Resumen RAE -->
+                    <div class="mb-4">
+                        <h4 class="text-sm font-bold text-navy mb-2">Ideas Clave (RAE):</h4>
+                        <ul class="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                            <li>Mapea la evolución de la burocracia weberiana hacia un modelo adaptativo.</li>
+                            <li>Propone 5 pilares: estructura ambidiestra, aprendizaje ágil, gobernanza en red, capacidades digitales y resiliencia.</li>
+                            <li>Conecta directamente con los desafíos de las entidades territoriales en contextos VUCA.</li>
+                        </ul>
+                    </div>
                     <span class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded mb-3">Artículo de revisión integrativa</span>
                     <p class="text-sm text-slate-600 leading-relaxed mb-4">
                         Mapea la evolución hacia la burocracia adaptativa en contextos VUCA. Propone 5 pilares: estructura ambidiestra, aprendizaje ágil, gobernanza en red, capacidades digitales y resiliencia. Conecta directamente con el RAE13.
@@ -573,35 +480,35 @@
         </div>
     </section>
 
-    <!-- ================= BIBLIOGRAFÍA CON VISOR PDF ================= -->
     <!-- ================= GLOSARIO ================= -->
-<section class="py-16 px-6 bg-white border-t border-slate-200">
-    <div class="max-w-5xl mx-auto" data-aos="fade-up">
-        <div class="text-center mb-10">
-            <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Glosario de Términos Clave</h2>
-            <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
+    <section class="py-16 px-6 bg-white border-t border-slate-200">
+        <div class="max-w-5xl mx-auto" data-aos="fade-up">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Glosario de Términos Clave</h2>
+                <div class="w-16 h-1 bg-emerald mx-auto rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="glass p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-emerald mb-1">VUCA</h4>
+                    <p class="text-sm text-slate-600">Acrónimo de Volatilidad, Incertidumbre, Complejidad y Ambigüedad. Describe entornos cambiantes y difíciles de predecir.</p>
+                </div>
+                <div class="glass p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-emerald mb-1">Gobernanza Multinivel</h4>
+                    <p class="text-sm text-slate-600">Coordinación y cooperación entre diferentes niveles de gobierno (nacional, departamental, municipal) para implementar políticas públicas.</p>
+                </div>
+                <div class="glass p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-emerald mb-1">Burocracia Adaptativa</h4>
+                    <p class="text-sm text-slate-600">Modelo organizacional que se ajusta rápidamente a los cambios del entorno, priorizando el aprendizaje y la flexibilidad sobre la rigidez.</p>
+                </div>
+                <div class="glass p-5 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-emerald mb-1">Descentralización</h4>
+                    <p class="text-sm text-slate-600">Transferencia de competencias, recursos y poder desde el gobierno central hacia las entidades territoriales.</p>
+                </div>
+            </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="glass p-5 rounded-xl border border-slate-200">
-                <h4 class="font-bold text-emerald mb-1">VUCA</h4>
-                <p class="text-sm text-slate-600">Acrónimo de Volatilidad, Incertidumbre, Complejidad y Ambigüedad. Describe entornos cambiantes y difíciles de predecir.</p>
-            </div>
-            <div class="glass p-5 rounded-xl border border-slate-200">
-                <h4 class="font-bold text-emerald mb-1">Gobernanza Multinivel</h4>
-                <p class="text-sm text-slate-600">Coordinación y cooperación entre diferentes niveles de gobierno (nacional, departamental, municipal) para implementar políticas públicas.</p>
-            </div>
-            <div class="glass p-5 rounded-xl border border-slate-200">
-                <h4 class="font-bold text-emerald mb-1">Burocracia Adaptativa</h4>
-                <p class="text-sm text-slate-600">Modelo organizacional que se ajusta rápidamente a los cambios del entorno, priorizando el aprendizaje y la flexibilidad sobre la rigidez.</p>
-            </div>
-            <div class="glass p-5 rounded-xl border border-slate-200">
-                <h4 class="font-bold text-emerald mb-1">Descentralización</h4>
-                <p class="text-sm text-slate-600">Transferencia de competencias, recursos y poder desde el gobierno central hacia las entidades territoriales.</p>
-            </div>
-        </div>
-    </div>
-</section>
-    
+    </section>
+
+    <!-- ================= BIBLIOGRAFÍA CON VISOR PDF ================= -->
     <section class="py-24 px-6 bg-navy text-white">
         <div class="max-w-6xl mx-auto" data-aos="fade-up">
             <div class="text-center mb-12">
@@ -779,11 +686,6 @@
         const canvas = document.getElementById('pdfCanvas');
         const ctx = canvas.getContext('2d');
 
-        /**
-         * Abre el modal del visor PDF y carga el documento.
-         * @param {string} url - URL del PDF o página del documento
-         * @param {string} title - Título a mostrar
-         */
         function openPDF(url, title) {
             document.getElementById('pdfTitle').textContent = title;
             document.getElementById('downloadLink').href = url;
@@ -791,14 +693,12 @@
             document.getElementById('pdfModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // Reset estado
             document.getElementById('pdfLoader').classList.remove('hidden');
             document.getElementById('pdfError').classList.add('hidden');
             canvas.classList.add('hidden');
             pdfDoc = null;
             pageNum = 1;
 
-            // Intentar cargar con PDF.js
             const loadingTask = pdfjsLib.getDocument({
                 url: url,
                 withCredentials: false,
@@ -814,15 +714,11 @@
                 renderPage(pageNum);
             }).catch(function(error) {
                 console.warn('Error cargando PDF con PDF.js:', error);
-                // Mostrar fallback
                 document.getElementById('pdfLoader').classList.add('hidden');
                 document.getElementById('pdfError').classList.remove('hidden');
             });
         }
 
-        /**
-         * Cierra el modal y limpia recursos.
-         */
         function closePDF() {
             document.getElementById('pdfModal').classList.remove('active');
             document.body.style.overflow = '';
@@ -830,9 +726,6 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        /**
-         * Renderiza una página específica del PDF.
-         */
         function renderPage(num) {
             pageRendering = true;
             pdfDoc.getPage(num).then(function(page) {
@@ -861,9 +754,6 @@
             document.getElementById('nextPage').disabled = (num >= pdfDoc.numPages);
         }
 
-        /**
-         * Cambia de página (delta: -1 o 1).
-         */
         function changePage(delta) {
             if (!pdfDoc) return;
             const newPage = pageNum + delta;
@@ -877,23 +767,18 @@
             }
         }
 
-        /**
-         * Ajusta el zoom del PDF.
-         */
         function zoomPDF(delta) {
             if (!pdfDoc) return;
             scale = Math.max(0.5, Math.min(3, scale + delta));
             renderPage(pageNum);
         }
 
-        // ===== Cerrar modal con tecla ESC =====
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closePDF();
             if (e.key === 'ArrowLeft') changePage(-1);
             if (e.key === 'ArrowRight') changePage(1);
         });
 
-        // ===== Cerrar al hacer clic fuera del contenido =====
         document.getElementById('pdfModal').addEventListener('click', function(e) {
             if (e.target === this) closePDF();
         });
@@ -907,6 +792,27 @@
                     }
                 });
             });
+        });
+
+        // ===== Lógica Modo Oscuro =====
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            if (isDark) {
+                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            } else {
+                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+            }
         });
     </script>
 </body>
