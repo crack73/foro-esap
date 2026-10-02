@@ -36,6 +36,41 @@
         }
     </script>
     <style>
+        /* ===== NAVEGACIÓN FIJA ===== */
+        html { scroll-behavior: smooth; }
+        section, main, header, footer { scroll-margin-top: 80px; }
+
+        #main-nav {
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            white-space: nowrap;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10B981;
+        }
+
+        .nav-scroll::-webkit-scrollbar { display: none; }
+        .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Estilos del modo oscuro para la nav */
+        body.dark-mode #main-nav {
+            background: rgba(15, 23, 42, 0.9) !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode #main-nav .text-navy { color: #f8fafc !important; }
+        body.dark-mode .nav-link { color: #cbd5e1; }
+        body.dark-mode .nav-link:hover, body.dark-mode .nav-link.active { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+
         /* Glassmorphism */
         .glass {
             background: rgba(255, 255, 255, 0.75);
@@ -126,11 +161,11 @@
 
         /* ===== MODO OSCURO ===== */
         body.dark-mode {
-            background-color: #0f172a !important; /* slate-900 */
-            color: #cbd5e1 !important; /* slate-300 */
+            background-color: #0f172a !important;
+            color: #cbd5e1 !important;
         }
         body.dark-mode .bg-white, body.dark-mode .bg-slate-50, body.dark-mode .bg-white\/80, body.dark-mode .bg-white\/50 {
-            background-color: #1e293b !important; /* slate-800 */
+            background-color: #1e293b !important;
             border-color: #334155 !important;
         }
         body.dark-mode .glass {
@@ -157,13 +192,37 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
 
-    <!-- Botón Modo Oscuro -->
-    <button id="theme-toggle" class="fixed top-4 right-4 z-50 bg-navy text-white p-3 rounded-full shadow-lg hover:bg-emerald transition-colors" title="Cambiar tema">
-        <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-    </button>
+    <!-- ================= MENÚ DE NAVEGACIÓN FIJO ================= -->
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 glass border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 md:px-6 flex items-center justify-between h-16 gap-2">
+            <!-- Logo / Título -->
+            <a href="#inicio" class="flex items-center gap-2 font-display font-black text-navy whitespace-nowrap">
+                <div class="w-8 h-8 bg-emerald rounded-lg flex items-center justify-center text-white text-sm">E</div>
+                <span class="hidden sm:inline">Foro ESAP</span>
+            </a>
+
+            <!-- Enlaces (scroll horizontal en móvil) -->
+            <div class="flex-1 overflow-x-auto nav-scroll">
+                <div class="flex gap-1 min-w-max px-2">
+                    <a href="#inicio" class="nav-link">Inicio</a>
+                    <a href="#contexto" class="nav-link">Contexto</a>
+                    <a href="#grupos" class="nav-link">Grupos</a>
+                    <a href="#taller" class="nav-link">Taller</a>
+                    <a href="#lecturas" class="nav-link">Lecturas</a>
+                    <a href="#glosario" class="nav-link">Glosario</a>
+                    <a href="#bibliografia" class="nav-link">Bibliografía</a>
+                </div>
+            </div>
+
+            <!-- Botón Modo Oscuro -->
+            <button id="theme-toggle" class="flex-shrink-0 bg-navy text-white p-2.5 rounded-full shadow-md hover:bg-emerald transition-colors" title="Cambiar tema">
+                <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </nav>
 
     <!-- ================= HERO SECTION ================= -->
-    <header class="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-navy via-blue-900 to-slate-900 overflow-hidden">
+    <header id="inicio" class="relative min-h-[90vh] pt-20 flex items-center justify-center bg-gradient-to-br from-navy via-blue-900 to-slate-900 overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
         
         <div class="relative z-10 max-w-5xl mx-auto px-6 text-center" data-aos="fade-up" data-aos-duration="1000">
@@ -185,7 +244,7 @@
     </header>
 
     <!-- ================= CONTEXTO DE SUCRE ================= -->
-    <section class="py-16 px-6 bg-white border-b border-slate-200">
+    <section id="contexto" class="py-16 px-6 bg-white border-b border-slate-200">
         <div class="max-w-5xl mx-auto" data-aos="fade-up">
             <div class="text-center mb-10">
                 <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">¿Por qué analizar el contexto de Sucre?</h2>
@@ -209,7 +268,7 @@
     </section>
 
     <!-- ================= GRUPOS CIPA ================= -->
-    <section class="py-16 px-6 bg-slate-50 border-b border-slate-200">
+    <section id="grupos" class="py-16 px-6 bg-slate-50 border-b border-slate-200">
         <div class="max-w-5xl mx-auto" data-aos="fade-up">
             <div class="text-center mb-10">
                 <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Grupos de Trabajo (CIPA)</h2>
@@ -271,7 +330,7 @@
     </section>
 
     <!-- ================= TALLER: INSTRUMENTO ================= -->
-    <section class="py-16 px-6 bg-white border-b border-slate-200">
+    <section id="taller" class="py-16 px-6 bg-white border-b border-slate-200">
         <div class="max-w-5xl mx-auto" data-aos="fade-up">
             <div class="text-center mb-10">
                 <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Taller: Análisis de la Estructura Orgánica</h2>
@@ -664,7 +723,7 @@
     </section>
 
     <!-- ================= GLOSARIO ================= -->
-    <section class="py-16 px-6 bg-white border-t border-slate-200">
+    <section id="glosario" class="py-16 px-6 bg-white border-t border-slate-200">
         <div class="max-w-5xl mx-auto" data-aos="fade-up">
             <div class="text-center mb-10">
                 <h2 class="text-2xl md:text-3xl font-display font-bold text-navy mb-4">Glosario de Términos Clave</h2>
@@ -692,7 +751,7 @@
     </section>
 
     <!-- ================= BIBLIOGRAFÍA CON VISOR PDF ================= -->
-    <section class="py-24 px-6 bg-navy text-white">
+    <section id="bibliografia" class="py-24 px-6 bg-navy text-white">
         <div class="max-w-6xl mx-auto" data-aos="fade-up">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">Bibliografía y Recursos de Investigación</h2>
@@ -967,9 +1026,9 @@
         });
 
         // ===== Acordeón: Cerrar otros al abrir uno =====
-        document.querySelectorAll('#lecturas details, .space-y-4 details').forEach((targetDetail) => {
+        document.querySelectorAll('#lecturas details, #taller details').forEach((targetDetail) => {
             targetDetail.addEventListener('click', () => {
-                document.querySelectorAll('#lecturas details, .space-y-4 details').forEach((detail) => {
+                document.querySelectorAll('#lecturas details, #taller details').forEach((detail) => {
                     if (detail !== targetDetail) {
                         detail.removeAttribute('open');
                     }
@@ -1022,6 +1081,26 @@
             }
             updateProgress();
         }
+
+        // ===== Detectar sección activa para resaltar el menú =====
+        const sections = document.querySelectorAll('section[id], header[id], main[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
 
         // Inicializar la barra de progreso al cargar la página
         updateProgress();
